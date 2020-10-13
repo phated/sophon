@@ -11,6 +11,7 @@ import { Planet, PlanetResource } from '../../_types/global/GlobalTypes';
 import UIEmitter, { UIEmitterEvent } from '../../utils/UIEmitter';
 import { Sub, Space } from '../../components/Text';
 import {
+  getPlayerShortHash,
   getPlanetShortHash,
   formatNumber,
   getPlanetRank,
@@ -20,6 +21,9 @@ import dfstyles from '../../styles/dfstyles.bs.js';
 import { getPlanetName, getPlanetCosmetic } from '../../utils/ProcgenUtils';
 import { SelectedContext } from '../GameWindow';
 import { SilverIcon, RankIcon } from '../Icons';
+import {
+  emptyAddress,
+} from '../../utils/CheckedTypeUtils';
 
 const DexWrapper = styled.div`
   height: 12.2em; // exact size so a row is cut off
@@ -48,26 +52,31 @@ const DexRow = styled.div`
     &:nth-child(2) {
       margin-right: 0.5em;
     }
-    // planet name
+    // player owner
     &:nth-child(3) {
+      // short hash
+      margin-right: 0.5em;
+    }
+    // planet name
+    &:nth-child(4) {
       flex-grow: 1;
     }
     // planet level
-    &:nth-child(4) {
-      width: 3em;
-      text-align: center;
-    }
-    // rank
     &:nth-child(5) {
       width: 3em;
       text-align: center;
     }
-    // energy
+    // rank
     &:nth-child(6) {
+      width: 3em;
+      text-align: center;
+    }
+    // energy
+    &:nth-child(7) {
       width: 6.5em;
     }
     // silver
-    &:nth-child(7) {
+    &:nth-child(8) {
       width: 6.5em;
     }
   }
@@ -247,8 +256,14 @@ export function EnergyDexPane({ hook }: { hook: ModalHook; }): JSX.Element {
 
     for (const [i, planet] of planets.sort(levelSort).entries()) {
 
+      let owner = '      ';
+      if (planet.owner !== emptyAddress) {
+        owner = getPlayerShortHash(planet.owner);
+      };
+
       dexes.push(<DexEntry
         key={i}
+        owner={owner}
         planet={planet}
         className={
           selected?.locationId === planet.locationId ? 'selected' : ''
@@ -293,6 +308,9 @@ export function EnergyDexPane({ hook }: { hook: ModalHook; }): JSX.Element {
           <span>
             <Space length={5} />
           </span>{' '}
+          <span>
+            Owner
+          </span>
           <span>
             Planet Name
           </span>

@@ -46,6 +46,7 @@ const DexRow = styled.div`
   height: 30px; // 5 + 3 * 7 + 4px
 
   & > span {
+    // planet ranking
     &:nth-child(1) {
       width: 2em;
     }
@@ -57,10 +58,12 @@ const DexRow = styled.div`
       width: 3em;
       position: relative; // for planetcircle
     }
+    // planet owner
     &:nth-child(3) {
       // short hash
       margin-right: 0.5em;
     }
+    // planet name
     &:nth-child(4) {
       flex-grow: 1;
     }
@@ -69,7 +72,7 @@ const DexRow = styled.div`
       width: 3em;
       text-align: center;
     }
-    // rank
+    // planet rank
     &:nth-child(6) {
       width: 3em;
       text-align: center;
@@ -517,7 +520,10 @@ export function PlanetDexPane({ hook }: { hook: ModalHook; }): JSX.Element {
       </ButtonRow>
       <DexWrapper>
         <DexRow className='title-row'>
-          <span>#</span>
+          <span
+            className={sortBy === Columns.Points ? 'selected' : ''}
+            onClick={() => setSortBy(Columns.Points)}
+          >#</span>
           <span></span> {/* empty icon cell */}
           <span>
             <Space length={5} />
